@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(221, 43, 141);
+    background-color: rgb(45, 23, 87);
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+header {
+    background-color: rgb(7, 12, 59);
+    min-width: 100%;
+    padding: 1rem;
+}
+
+header h1, header p {
+    margin: 0px;
+    padding: 0px;
+}
+
+#rendered_frame {
+    align-self: center;
+    font-family: monospace;
+    white-space: pre;
+    background-color: black;
+    font-size: 16pt;
+    padding: 16px;
+    border-radius: 4px;
+}
