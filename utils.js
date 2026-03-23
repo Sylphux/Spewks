@@ -27,3 +27,10 @@ function deleteCookie(name){
   checkForCookies()
   checkUnsaved()
 }
+
+function randTo(n){
+  return Math.floor(Math.random() * (n + 1))
+}
+
+//for pausing in async functions using await
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));

@@ -1,25 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <link rel="stylesheet" href="style.css" />
     <!-- <link ref="game" href="game.css"> -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Spewks</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>SPEWKS</h1>
-        <p>Little spewk will grow strong.</p>
+      <h1>SPEWKS</h1>
+      <p>Little spewk will grow strong.</p>
     </header>
-    <pre id="rendered_frame">
-No render.</pre>
-</body>
+    <pre id="rendered_frame">No render.</pre>
+    <div id="Controls">
+      <input
+        type="checkbox"
+        id="play"
+        name="play"
+        value="play"
+        onclick="start()"
+      />
+      <label for="play"> Pause / resume rendering </label><br />
+    </div>
+    <footer>
+      <p>Made by Sylphus for fun</p>
+    </footer>
+  </body>
 
-<script src="utils.js"></script>
-<script src="settings.js"></script>
-<script src="frames.js"></script>
-<script src="renderengine.js"></script>
-<script src="script.js"></script>
-
+  <script src="utils.js"></script>
+  <script src="settings.js"></script>
+  <script src="frames.js"></script>
+  <script src="renderengine.js"></script>
+  <script src="script.js"></script>
 </html>
