@@ -14,23 +14,23 @@
     </header>
     <pre id="rendered_frame">No render.</pre>
     <div id="Controls">
-      <input
-        type="checkbox"
-        id="play"
-        name="play"
-        value="play"
-        onclick="start()"
-      />
-      <label for="play"> Pause / resume rendering </label><br />
+      <button onclick="playPause()">Play / Pause</button>
+      <button onclick="console.log(game)">Get game info</button>
+      <!-- <button onclick="saveGame()">Save</button>
+      <button onclick="loadGame()">Load game</button>
+      <button onclick="outputCookie()">Output cookie</button> -->
     </div>
     <footer>
-      <p>Made by Sylphus for fun</p>
+      <p>Visit the <a href="https://github.com/Sylphux/Spewks">github page</a></p>
+      <p>Made by Sylphus in JS.</p>
     </footer>
   </body>
 
   <script src="utils.js"></script>
   <script src="settings.js"></script>
   <script src="frames.js"></script>
+  <script src="functions.js"></script>
+  <script src="load.js"></script>
   <script src="renderengine.js"></script>
-  <script src="script.js"></script>
+  <script src="main.js"></script>
 </html>

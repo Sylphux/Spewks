@@ -1,36 +1,44 @@
-function setCookie(cname, val, exdays = 2000) {
-  cvalue = JSON.stringify(val)
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// function setCookie(cname, val, exdays = 400) {
+//   cvalue = JSON.stringify(val)
+//   const d = new Date();
+//   d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//   let expires = "expires="+ d.toUTCString();
+//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }
+
+// function getCookie(cname) {
+//   let name = cname + "=";
+//   let decodedCookie = decodeURIComponent(document.cookie);
+//   let ca = decodedCookie.split(';');
+//   for(let i = 0; i <ca.length; i++) {
+//     let c = ca[i];
+//     while (c.charAt(0) == ' ') {
+//       c = c.substring(1);
+//     }
+//     if (c.indexOf(name) == 0) {
+//       return JSON.parse(c.substring(name.length, c.length));
+//     }
+//   }
+//   return "";
+// }
+
+// function deleteCookie(name){
+//   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+//   checkForCookies()
+//   checkUnsaved()
+// }
+
+function save(key, value){
+  localStorage.setItem(key, JSON.stringify(value))
 }
 
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return JSON.parse(c.substring(name.length, c.length));
-    }
-  }
-  return "";
-}
-
-function deleteCookie(name){
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  checkForCookies()
-  checkUnsaved()
+function load(key){
+  return JSON.parse(localStorage.getItem(key))
 }
 
 function randTo(n){
   return Math.floor(Math.random() * (n + 1))
 }
 
-//for pausing in async functions using await
+//for pausing in async functions using await(mstime)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
