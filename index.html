@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="style.css" />
     <!-- <link ref="game" href="game.css"> -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Spewks</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
@@ -16,9 +16,13 @@
     <div id="Controls">
       <button onclick="playPause()">Play / Pause</button>
       <button onclick="console.log(game)">Get game info</button>
-      <!-- <button onclick="saveGame()">Save</button>
-      <button onclick="loadGame()">Load game</button>
-      <button onclick="outputCookie()">Output cookie</button> -->
+      <button onclick="playSound('spewk_ihu_0-00.499.wav')">Playsound</button>
+      <button id="toggle_sound" onclick="toggleSound()">Toggle sound</button>
+      <button onclick="console.log(audioContext.state)">Get sound state</button>
+    </div>
+    <div id="hidden_stuff">
+      <div id="audio_files">
+      </div>
     </div>
     <footer>
       <p>Visit the <a href="https://github.com/Sylphux/Spewks">github page</a></p>

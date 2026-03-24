@@ -1,6 +1,36 @@
 function saveGame(){
-  console.log("Saving to local storage...")
+  // console.log("Saving to local storage...")
   save("savedGame", game)
+}
+
+function toggleSound() {
+  if (audioContext.state == "suspended") {
+    audioContext.resume()
+    document.getElementById("toggle_sound").innerHTML = "Stop sound"
+  } else {
+    audioContext.suspend()
+    document.getElementById("toggle_sound").innerHTML = "Resume sound"
+  }
+}
+
+async function playSound(soundArr){
+  let soundName = ""
+  let paramType = typeof soundArr
+  if (paramType == "array" || paramType == "object"){
+    soundName = soundArr[randTo(soundArr.length - 1)] // selects a random sound from the availables
+  } else if (typeof soundArr == "string"){
+    soundName = soundArr
+  } else {
+    console.log("Not a valid sound")
+    return
+  }
+  audioElement = document.getElementById(soundName)
+  if (!audioElement._sourceNode) {
+    audioElement._sourceNode = audioContext.createMediaElementSource(audioElement);
+    audioElement._sourceNode.connect(audioContext.destination)
+  }
+  audioElement.currentTime = 0
+  audioElement.play()
 }
 
 function loadGame(){
@@ -40,6 +70,7 @@ function checkIfAte() {
   let x = game.graphics.food.foodPos.x;
   if (spewk[y][x] != " ") {
     console.log("Spewk ate some food!");
+    playSound(sounds.spewkEats)
     return true;
   }
   return false;
@@ -73,7 +104,11 @@ function moveSpewkRand() {
   if (Math.abs(rand) >= 10) {
     x = rand / 10;
   }
+  let oldFrame = game.graphics.spewk
   game.graphics.spewk = moveSprite(game.graphics.spewk, { x: x, y: y });
+  if (JSON.stringify(oldFrame) != JSON.stringify(game.graphics.spewk)){ // if moved do... Stringyfy is overkill
+    playSound(sounds.spewkSteps)
+  }
 }
 
 // pos is x: y: object
@@ -107,4 +142,9 @@ function moveSprite(sprite, pos, allowLeave = false) {
     return sprite;
   }
   return tempSprite;
+}
+
+function spewkFoundDead() {
+  console("Your spewk died of sadness.")
+  game.data.alive = false;
 }

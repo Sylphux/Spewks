@@ -69,4 +69,4 @@ function launch() {
   }
 }
 
-launch();
+launch()

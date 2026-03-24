@@ -40,5 +40,10 @@ function randTo(n){
   return Math.floor(Math.random() * (n + 1))
 }
 
+function milliToDays(ms) {
+  let day = 1000 * 60 * 60 * 24
+  return Math.round(ms / 1000 / 60 / 60 / 24)
+}
+
 //for pausing in async functions using await(mstime)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
