@@ -46,7 +46,13 @@ async function playSound(soundArr) {
     audioElement._sourceNode.connect(audioContext.destination);
   }
   audioElement.currentTime = 0;
+  let soundError = false;
   audioElement.play();
+  if (audioContext.state == "running") {
+    document.getElementById("toggle_sound").innerHTML = "🕪";
+  } else {
+    document.getElementById("toggle_sound").innerHTML = "🕨";
+  }
 }
 
 // Game state

@@ -23,6 +23,16 @@ a {
   color: var(--text);
 }
 
+a:hover {
+  color: var(--dark);
+  background-color: var(--text);
+  border-radius: 2px;
+}
+
+a:active {
+  color: var(--darker);
+}
+
 body {
   color: var(--text);
   background-color: var(--dark);
@@ -69,7 +79,7 @@ h1 {
 
 #rendered_frame {
   align-self: center;
-  /* font-family: monospace; */
+  font-family: monospace;
   white-space: pre;
   background-color: black;
   font-size: 16pt;
@@ -88,6 +98,11 @@ button {
   border-radius: 2px;
 }
 
+button:hover {
+  background-color: var(--darker);
+  cursor: pointer;
+}
+
 #controls {
   display: flex;
   flex-direction: row;
@@ -95,11 +110,6 @@ button {
   flex-wrap: wrap;
   justify-content: center;
   padding: 1rem;
-}
-
-button:hover {
-  background-color: var(--darker);
-  cursor: pointer;
 }
 
 #hidden_stuff {
