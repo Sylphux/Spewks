@@ -2,18 +2,21 @@
 
 function loadLayers() {
   layersArr[layers.bg] = biomes[game.graphics.background][0];
-  layersArr[layers.food] = game.graphics.food.frame;
   layersArr[layers.spewk] = game.graphics.spewk;
 }
 
 function saveLayers() {
-  game.graphics.food.frame = layersArr[layers.food];
   game.graphics.spewk = layersArr[layers.spewk];
 }
 
 function saveGame() {
   saveLayers();
   save("savedGame", game);
+}
+
+function reset() {
+  localStorage.clear("savedGame");
+  location.reload();
 }
 
 // Sound
@@ -61,6 +64,23 @@ function pause() {
   idle = true;
 }
 
+// Animation
+
+function animateFood() {
+  let pos = game.data.foodPos
+  let actualChar = layersArr[layers.food][pos["y"]][pos["x"]]
+  if (actualChar == foodAnim.at(-1)) {
+      layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[0]
+  } else {
+    for (let [i, c] of foodAnim.entries()){
+        if (actualChar == c) {
+          layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[i + 1]
+          break
+        }
+    }
+  }
+}
+
 // Game actions
 
 function gainXP() {
@@ -81,12 +101,13 @@ function spawnFood(pos = null) {
     y = randTo(default_frame.y - 1);
     x = randTo(default_frame.x - 1);
   } else {
-    y = pos[y];
-    x = pos[x];
+    console.log(pos);
+    y = pos["y"];
+    x = pos["x"];
   }
-  tempFrame[y][x] = "⬤";
+  tempFrame[y][x] = foodAnim[0];
   layersArr[layers.food] = tempFrame;
-  game.graphics.food.foodPos = { x: x, y: y };
+  game.data.foodPos = { x: x, y: y };
 }
 
 function moveSpewkRand() {
@@ -150,9 +171,9 @@ function spewkFoundDead() {
 
 function checkIfAte() {
   let spewk = layersArr[layers.spewk];
-  let foodPos = game.graphics.food.foodPos;
+  let tempPos = game.data.foodPos;
   console.log();
-  if (spewk[foodPos.y][foodPos.x] != " ") {
+  if (spewk[tempPos.y][tempPos.x] != " ") {
     console.log("Spewk ate some food!");
     playSound(sounds.spewkEats);
     return true;

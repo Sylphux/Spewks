@@ -7,7 +7,6 @@ console.log("Loading templates...");
 let game = {
   graphics: {
     background: "",
-    food: { frame: [], foodPos: { x: -1, y: -1 } },
     spewk: [],
   },
   data: {
@@ -18,6 +17,7 @@ let game = {
     upgrades: 0,
     availableUps: 0,
     intention: "none",
+    foodPos: { x: -1, y: -1 },
     alive: true,
   },
 };
@@ -91,7 +91,6 @@ function createNewGame() {
   console.log("Creating new game.");
   game.graphics.background = getRandomBiome(); // string
   game.graphics.spewk = new_spewk;
-  game.graphics.food.frame = spaces_frame;
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();
   loadLayers();
@@ -103,8 +102,7 @@ function loadGame() {
   if (temp != null) {
     game = temp;
     loadLayers();
-    console.log(game);
-    console.log(layersArr);
+    spawnFood(game.data.foodPos)
     console.log("Loaded save from local storage.");
     return true;
   }
@@ -122,7 +120,7 @@ if (onlyNewGame) {
 
 // Graphics (background)
 
-console.log("Loading graphics (background animation)...");
+console.log("Loading graphics (biome)...");
 
 let biomeFrames = biomes[game.graphics.background];
 

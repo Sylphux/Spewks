@@ -103,7 +103,7 @@ button:hover {
   cursor: pointer;
 }
 
-#controls {
+.controls {
   display: flex;
   flex-direction: row;
   gap: 1rem;

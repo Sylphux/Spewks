@@ -9,3 +9,4 @@ let onlyNewGame = false;
 let default_frame = { x: 30, y: 14 }; // do not touch
 let refreshRate = 1000 / global_fps; // do not touch
 let halfRefreshRate = 1000 / (global_fps / 2); // do not touch
+let itemAnimSpeed = 150

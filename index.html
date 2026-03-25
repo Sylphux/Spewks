@@ -13,13 +13,14 @@
       <p>Little spewks will grow strong.</p>
     </header>
     <pre id="rendered_frame">No render.</pre>
-    <div id="controls">
+    <div class="controls">
       <button onclick="playPause()">Play / Pause</button>
       <button onclick="console.log(game)">Get game info</button>
-      <button onclick="playSound('spewk_ihu_0-00.499.wav')">Playsound</button>
+      <button onclick="playSound(sounds.spewkIhu)">Playsound</button>
       <button id="toggle_sound" onclick="toggleSound()">🕨</button>
       <button onclick="console.log(audioContext.state)">Get sound state</button>
       <button>Upgrade</button>
+      <button onclick="reset()">Reset</button>
     </div>
     <div id="hidden_stuff">
       <div id="audio_files">

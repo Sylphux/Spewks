@@ -69,3 +69,5 @@ const biomes = {
         ]
     ]
 }
+
+let foodAnim = ["|", "/", "-", "\\"]

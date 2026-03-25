@@ -25,7 +25,6 @@ async function animateMap() {
   while (!idle) {
     await delay(halfRefreshRate);
     if (f < biomeFrames.length) {
-      //biomeFrame = biomeFrames[f];
       layersArr[layers.bg] = biomeFrames[f]
       f++;
     } else {
@@ -41,11 +40,19 @@ async function autoSave() {
   }
 }
 
+async function animateItems() {
+  while (!idle) {
+    await delay(itemAnimSpeed);
+    animateFood()
+  }
+}
+
 // Run
 
 function play() {
   idle = false;
   animateMap();
+  animateItems()
   spewkLives();
   renderFrames();
   autoSave()
