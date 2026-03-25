@@ -1,7 +1,31 @@
+@font-face {
+  font-family: micro5;
+  src: url(Assets/Fonts/Micro5-Regular.woff);
+}
+
+@font-face {
+  font-family: JetBrains;
+  src: url(Assets/Fonts/JetBrainsMono-Regular.woff);
+}
+
+:root {
+  --text: rgb(221, 43, 141);
+  --dark: rgb(7, 12, 59); 
+  --darker: rgb(3, 6, 29); 
+  --medium: rgb(45, 23, 87);
+}
+
+* {
+  font-family: JetBrains;
+}
+
+a {
+  color: var(--text);
+}
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  color: rgb(221, 43, 141);
-  background-color: rgb(45, 23, 87);
+  color: var(--text);
+  background-color: var(--dark);
   margin: 0px;
   padding: 0px;
   min-height: 100vh;
@@ -14,8 +38,9 @@ body {
 }
 
 header {
-  background-color: rgb(7, 12, 59);
+  background-color: var(--medium);
   padding: 1rem;
+  padding-top: 0px;
 }
 
 footer {
@@ -23,7 +48,7 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background-color: rgb(7, 12, 59);
+  background-color: var(--medium);
 }
 
 footer * {
@@ -37,14 +62,44 @@ header p {
   padding: 0px;
 }
 
+h1 {
+  font-family: micro5;
+  font-size: 48pt;
+}
+
 #rendered_frame {
   align-self: center;
-  font-family: monospace;
+  /* font-family: monospace; */
   white-space: pre;
   background-color: black;
   font-size: 16pt;
   padding: 16px;
   border-radius: 4px;
+}
+
+button {
+  background-color: var(--medium);
+  color: var(--text);
+  border-style: none;
+  height: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0px;
+  border-radius: 2px;
+}
+
+#controls {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1rem;
+}
+
+button:hover {
+  background-color: var(--darker);
+  cursor: pointer;
 }
 
 #hidden_stuff {
