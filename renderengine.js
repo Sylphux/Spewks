@@ -4,7 +4,7 @@ function renderFrame(arr) {
   view.innerHTML = arr.join("\n");
 }
 
-//merges multiple 2d arrays into one by order, like layers
+// merges layers into one 2d array
 function mergeFrames(framesArr) {
   let result = real2d(spaces_frame); // transform into arr of arr to write in
   for (let currentFrame of framesArr) {
@@ -19,7 +19,13 @@ function mergeFrames(framesArr) {
   return fake2d(result);
 }
 
-// main rendering function
-function mergeAndRender(framesArr) {
+// input : selects non empty layers to send to merge
+function mergeAndRender() {
+  let framesArr = []
+  for (let i of layersArr){
+    if (i != "") {
+      framesArr.push(i)
+    }
+  }
   renderFrame(mergeFrames(framesArr));
 }

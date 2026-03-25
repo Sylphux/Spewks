@@ -1,4 +1,8 @@
-console.clear()
+console.clear();
+
+// Templates
+
+console.log("Loading templates...");
 
 let game = {
   graphics: {
@@ -18,6 +22,10 @@ let game = {
   },
 };
 
+// Audio
+
+console.log("Loading audio...");
+
 let sounds = {
   spewkSteps: [
     "spewk_step_0-00.072.wav",
@@ -36,11 +44,9 @@ let sounds = {
     "spewk_step_0-00.101-003.wav",
     "spewk_step_0-00.105.wav",
     "spewk_step_0-00.106.wav",
-    "spewk_step_0-00.108.wav"
+    "spewk_step_0-00.108.wav",
   ],
-  spewkEats: [
-    "spewk_eats_0-01.629.wav"
-  ],
+  spewkEats: ["spewk_eats_0-01.629.wav"],
   spewkIhu: [
     "spewk_ihu_0-00.499.wav",
     "spewk_ihu_0-00.554.wav",
@@ -49,48 +55,87 @@ let sounds = {
     "spewk_ihu_0-00.660.wav",
     "spewk_ihu_0-00.667.wav",
     "spewk_ihu_0-00.717.wav",
-    "spewk_ihu_0-00.724.wav"
-  ]
-}
+    "spewk_ihu_0-00.724.wav",
+  ],
+};
 
 const audioContext = new AudioContext();
-let audioElement = null
+let audioElement = null;
 
-Object.keys(sounds).forEach(key => {
-  for (let sound of sounds[key]){
-    let tempSound = document.createElement('audio')
-    tempSound.id = sound
-    tempSound.src = `Audio/${sound}`
-    tempSound.autoplay = false
-    document.getElementById('audio_files').appendChild(tempSound)
+Object.keys(sounds).forEach((key) => { // adding sounds to DOM
+  for (let sound of sounds[key]) {
+    let tempSound = document.createElement("audio");
+    tempSound.id = sound;
+    tempSound.src = `Audio/${sound}`;
+    tempSound.autoplay = false;
+    document.getElementById("audio_files").appendChild(tempSound);
   }
-})
+});
 
-playSound(sounds.spewkSteps)
+// Graphics (layers)
+
+console.log("Loading graphics (layers layout)...");
+
+let layersArr = new Array(20).fill("");
+const layers = {
+  bg: 0,
+  food: 9,
+  spewk: 10,
+};
+
+// Game data loading
+
+console.log("Loading game...");
 
 function createNewGame() {
   console.log("Creating new game.");
-  game.graphics.background = getRandomBiome();
-  console.log("Selected random biome : " + game.graphics.background);
-  spawnFood();
+  game.graphics.background = getRandomBiome(); // string
   game.graphics.spewk = new_spewk;
+  game.graphics.food.frame = spaces_frame;
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();
+  loadLayers();
+  spawnFood();
 }
 
-if (!loadGame()) { // creates new game if no save found, else save is loaded.
-  createNewGame()
+function loadGame() {
+  let temp = load("savedGame");
+  if (temp != null) {
+    game = temp;
+    loadLayers();
+    console.log(game);
+    console.log(layersArr);
+    console.log("Loaded save from local storage.");
+    return true;
+  }
+  console.log("Nothing to load.");
+  return false;
 }
 
-let today = Date.parse(new Date())
-let lastSeen = Date.parse(game.data.lastSeen)
-let absence = (milliToDays(today) - milliToDays(lastSeen))
-console.log("Absent for : " + absence + " days.")
+if (onlyNewGame) {
+  createNewGame();
+} else {
+  if (!loadGame()) {
+    createNewGame();
+  }
+}
+
+// Graphics (background)
+
+console.log("Loading graphics (background animation)...");
+
+let biomeFrames = biomes[game.graphics.background];
+
+// Gameplay
+
+console.log("Loading gameplay elements...");
+
+let today = Date.parse(new Date());
+let lastSeen = Date.parse(game.data.lastSeen);
+let absence = milliToDays(today) - milliToDays(lastSeen);
+console.log("Absent for : " + absence + " days.");
 if (absence > 14) {
-  spewkFoundDead()
+  spewkFoundDead();
 } else {
   game.data.lastSeen = new Date();
 }
-
-let biomeFrames = biomes[game.graphics.background];
-let biomeFrame = biomeFrames[0];

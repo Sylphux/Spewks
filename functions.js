@@ -1,80 +1,61 @@
-function saveGame(){
-  // console.log("Saving to local storage...")
-  save("savedGame", game)
+// Saving and loading
+
+function loadLayers() {
+  layersArr[layers.bg] = biomes[game.graphics.background][0];
+  layersArr[layers.food] = game.graphics.food.frame;
+  layersArr[layers.spewk] = game.graphics.spewk;
 }
+
+function saveLayers() {
+  game.graphics.food.frame = layersArr[layers.food];
+  game.graphics.spewk = layersArr[layers.spewk];
+}
+
+function saveGame() {
+  saveLayers();
+  save("savedGame", game);
+}
+
+// Sound
 
 function toggleSound() {
   if (audioContext.state == "suspended") {
-    audioContext.resume()
-    document.getElementById("toggle_sound").innerHTML = "Stop sound"
+    audioContext.resume();
+    document.getElementById("toggle_sound").innerHTML = "🕪";
   } else {
-    audioContext.suspend()
-    document.getElementById("toggle_sound").innerHTML = "Resume sound"
+    audioContext.suspend();
+    document.getElementById("toggle_sound").innerHTML = "🕨";
   }
 }
 
-async function playSound(soundArr){
-  let soundName = ""
-  let paramType = typeof soundArr
-  if (paramType == "array" || paramType == "object"){
-    soundName = soundArr[randTo(soundArr.length - 1)] // selects a random sound from the availables
-  } else if (typeof soundArr == "string"){
-    soundName = soundArr
+async function playSound(soundArr) {
+  let soundName = "";
+  let paramType = typeof soundArr;
+  if (paramType == "array" || paramType == "object") {
+    soundName = soundArr[randTo(soundArr.length - 1)];
+  } else if (typeof soundArr == "string") {
+    soundName = soundArr;
   } else {
-    console.log("Not a valid sound")
-    return
+    console.log("Not a valid sound");
+    return;
   }
-  audioElement = document.getElementById(soundName)
+  audioElement = document.getElementById(soundName);
   if (!audioElement._sourceNode) {
-    audioElement._sourceNode = audioContext.createMediaElementSource(audioElement);
-    audioElement._sourceNode.connect(audioContext.destination)
+    audioElement._sourceNode =
+      audioContext.createMediaElementSource(audioElement);
+    audioElement._sourceNode.connect(audioContext.destination);
   }
-  audioElement.currentTime = 0
-  audioElement.play()
+  audioElement.currentTime = 0;
+  audioElement.play();
 }
 
-function loadGame(){
-  temp = load("savedGame")
-  if (temp != null){
-    game = temp
-    console.log("Loaded save from local storage.")
-    return true
-  }
-  console.log("Nothing to load.")
-  return false
-}
+// Game state
 
 function pause() {
   idle = true;
 }
 
-// turns arr of strings into arr of arr
-function real2d(arr) {
-  return arr.map((string) => string.split(""));
-}
-
-// turns arr of arr into arr of strings
-function fake2d(arr) {
-  return arr.map((string) => string.join(""));
-}
-
-function getRandomBiome() { // gets a random biome name
-  let availableBiomes = Object.keys(biomes);
-  console.log("Available biomes : " + availableBiomes);
-  return availableBiomes[randTo(availableBiomes.length - 1)];
-}
-
-function checkIfAte() {
-  let spewk = game.graphics.spewk;
-  let y = game.graphics.food.foodPos.y;
-  let x = game.graphics.food.foodPos.x;
-  if (spewk[y][x] != " ") {
-    console.log("Spewk ate some food!");
-    playSound(sounds.spewkEats)
-    return true;
-  }
-  return false;
-}
+// Game actions
 
 function gainXP() {
   game.data.xp++;
@@ -82,15 +63,24 @@ function gainXP() {
     game.data.level++;
     game.data.xp = 0;
     game.data.availableUps++;
+    console.log("### Spewk : I'm itching...");
   }
 }
 
-function spawnFood() { // randomly resets a food on the map
+function spawnFood(pos = null) {
   let tempFrame = real2d(spaces_frame);
-  let y = randTo(default_frame.y - 1);
-  let x = randTo(default_frame.x - 1);
-  tempFrame[y][x] = "¤";
-  game.graphics.food = { frame: tempFrame, foodPos: { x: x, y: y } };
+  let y = 0;
+  let x = 0;
+  if (pos === null) {
+    y = randTo(default_frame.y - 1);
+    x = randTo(default_frame.x - 1);
+  } else {
+    y = pos[y];
+    x = pos[x];
+  }
+  tempFrame[y][x] = "⬤";
+  layersArr[layers.food] = tempFrame;
+  game.graphics.food.foodPos = { x: x, y: y };
 }
 
 function moveSpewkRand() {
@@ -104,23 +94,22 @@ function moveSpewkRand() {
   if (Math.abs(rand) >= 10) {
     x = rand / 10;
   }
-  let oldFrame = game.graphics.spewk
-  game.graphics.spewk = moveSprite(game.graphics.spewk, { x: x, y: y });
-  if (JSON.stringify(oldFrame) != JSON.stringify(game.graphics.spewk)){ // if moved do... Stringyfy is overkill
-    playSound(sounds.spewkSteps)
+  let oldFrame = layersArr[layers.spewk];
+  layersArr[layers.spewk] = moveSprite(oldFrame, { x: x, y: y });
+  if (JSON.stringify(oldFrame) != JSON.stringify(layersArr[layers.spewk])) {
+    playSound(sounds.spewkSteps);
   }
 }
 
-// pos is x: y: object
-function moveSprite(sprite, pos, allowLeave = false) {
+function moveSprite(sprite, pos = { x: 0, y: 0 }, allowLeave = false) {
   let tempSprite = real2d(spaces_frame);
   let gotBlocked = false;
   for (y = 0; y < sprite.length; y++) {
     for (x = 0; x < sprite[y].length; x++) {
       let nextY = y + pos.y;
       let nextX = x + pos.x;
-      // only write in new frame if in frame
       if (
+        // only write in new frame if index exists
         nextY > -1 &&
         nextY < tempSprite.length &&
         nextX > -1 &&
@@ -130,10 +119,12 @@ function moveSprite(sprite, pos, allowLeave = false) {
       } else if (sprite[y][x] != " ") {
         console.log("Border collision detected");
         gotBlocked = true;
-        break;
+        if (!allowLeave) {
+          break;
+        }
       }
     }
-    if (gotBlocked) {
+    if (gotBlocked && !allowLeave) {
       break;
     }
   }
@@ -145,6 +136,28 @@ function moveSprite(sprite, pos, allowLeave = false) {
 }
 
 function spewkFoundDead() {
-  console("Your spewk died of sadness.")
+  console("Your spewk died of sadness.");
   game.data.alive = false;
+}
+
+// Checks
+
+function checkIfAte() {
+  let spewk = layersArr[layers.spewk];
+  let foodPos = game.graphics.food.foodPos;
+  console.log();
+  if (spewk[foodPos.y][foodPos.x] != " ") {
+    console.log("Spewk ate some food!");
+    playSound(sounds.spewkEats);
+    return true;
+  }
+  return false;
+}
+
+// Other utils
+
+function getRandomBiome() {
+  let availableBiomes = Object.keys(biomes);
+  console.log("Available biomes : " + availableBiomes);
+  return availableBiomes[randTo(availableBiomes.length - 1)]; // string
 }

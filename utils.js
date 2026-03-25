@@ -1,32 +1,36 @@
-// function setCookie(cname, val, exdays = 400) {
-//   cvalue = JSON.stringify(val)
-//   const d = new Date();
-//   d.setTime(d.getTime() + (exdays*24*60*60*1000));
-//   let expires = "expires="+ d.toUTCString();
-//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-// }
+// Cookies
 
-// function getCookie(cname) {
-//   let name = cname + "=";
-//   let decodedCookie = decodeURIComponent(document.cookie);
-//   let ca = decodedCookie.split(';');
-//   for(let i = 0; i <ca.length; i++) {
-//     let c = ca[i];
-//     while (c.charAt(0) == ' ') {
-//       c = c.substring(1);
-//     }
-//     if (c.indexOf(name) == 0) {
-//       return JSON.parse(c.substring(name.length, c.length));
-//     }
-//   }
-//   return "";
-// }
+function setCookie(cname, val, exdays = 400) {
+  cvalue = JSON.stringify(val)
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
-// function deleteCookie(name){
-//   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-//   checkForCookies()
-//   checkUnsaved()
-// }
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return JSON.parse(c.substring(name.length, c.length));
+    }
+  }
+  return "";
+}
+
+function deleteCookie(name){
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  checkForCookies()
+  checkUnsaved()
+}
+
+// Local storage
 
 function save(key, value){
   localStorage.setItem(key, JSON.stringify(value))
@@ -35,6 +39,8 @@ function save(key, value){
 function load(key){
   return JSON.parse(localStorage.getItem(key))
 }
+
+// Math
 
 function randTo(n){
   return Math.floor(Math.random() * (n + 1))
@@ -45,5 +51,16 @@ function milliToDays(ms) {
   return Math.round(ms / 1000 / 60 / 60 / 24)
 }
 
-//for pausing in async functions using await(mstime)
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// Other
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // pause an async func with wait delay(n)
+
+// turns arr of strings into arr of arr
+function real2d(arr) {
+  return arr.map((string) => string.split(""));
+}
+
+// turns arr of arr into arr of strings
+function fake2d(arr) {
+  return arr.map((string) => string.join(""));
+}

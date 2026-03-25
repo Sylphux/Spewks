@@ -3,12 +3,7 @@
 async function renderFrames() {
   while (!idle) {
     await delay(refreshRate);
-    let framesToRender = [
-      biomeFrame,
-      game.graphics.food.frame,
-      game.graphics.spewk,
-    ];
-    mergeAndRender(framesToRender);
+    mergeAndRender();
   }
 }
 
@@ -30,7 +25,8 @@ async function animateMap() {
   while (!idle) {
     await delay(halfRefreshRate);
     if (f < biomeFrames.length) {
-      biomeFrame = biomeFrames[f];
+      //biomeFrame = biomeFrames[f];
+      layersArr[layers.bg] = biomeFrames[f]
       f++;
     } else {
       f = 0;
@@ -62,10 +58,10 @@ function playPause() {
 
 function launch() {
   if (!idle) {
-    console.log("Playing");
+    console.log("Status : playing");
     play();
   } else {
-    console.log("Paused");
+    console.log("Status : paused");
   }
 }
 
