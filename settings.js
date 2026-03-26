@@ -1,5 +1,5 @@
 // You can change these
-let autoSaveDelay = 5000;
+let autoSaveDelay = 3000;
 let global_fps = 16;
 let timeAloneBeforeDeath = 14;
 let idle = false; // If set to true, the game will launch in a paused state

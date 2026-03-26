@@ -83,6 +83,7 @@ const layers = {
   bg: 0,
   food: 9,
   spewk: 10,
+  ui: 20,
 };
 
 // Game data loading
@@ -92,7 +93,7 @@ console.log("Loading game...");
 function createNewGame() {
   console.log("Creating new game.");
   game.graphics.background = getRandomBiome(); // string
-  game.graphics.spewk = new_spewk;
+  game.graphics.spewk = newSpewk;
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();
   loadLayers();
@@ -105,6 +106,7 @@ function loadGame() {
     game = temp;
     loadLayers();
     spawnFood(game.data.foodPos);
+    updateLvGraphics()
     console.log("Loaded save from local storage.");
     return true;
   }

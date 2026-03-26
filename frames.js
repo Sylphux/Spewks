@@ -2,7 +2,7 @@ const spaces_frame = Array.from({ length: default_frame.y }, () =>
   new Array(default_frame.x).fill(" "),
 ).map((string) => string.join(""));
 
-const new_spewk = [
+const newSpewk = [
   "                              ",
   "                              ",
   "                              ",
@@ -17,6 +17,23 @@ const new_spewk = [
   "                              ",
   "                              ",
   "                              ",
+];
+
+let uiCanvas = [
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "LV 1                          ",
 ];
 
 const biomes = {
