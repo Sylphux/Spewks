@@ -10,6 +10,7 @@ let game = {
     spewk: [],
   },
   data: {
+    name: "",
     startDate: "",
     lastSeen: "",
     level: 1,
@@ -93,6 +94,7 @@ console.log("Loading game...");
 function createNewGame() {
   console.log("Creating new game.");
   game.graphics.background = getRandomBiome(); // string
+  game.data.name = generateName()
   game.graphics.spewk = newSpewk;
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();

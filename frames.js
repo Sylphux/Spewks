@@ -1,4 +1,4 @@
-const spaces_frame = Array.from({ length: default_frame.y }, () =>
+const spacesFrame = Array.from({ length: default_frame.y }, () =>
   new Array(default_frame.x).fill(" "),
 ).map((string) => string.join(""));
 

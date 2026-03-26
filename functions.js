@@ -3,7 +3,7 @@
 function loadLayers() {
   layersArr[layers.bg] = biomes[game.graphics.background][0];
   layersArr[layers.spewk] = game.graphics.spewk;
-  layersArr[layers.ui] = uiCanvas
+  layersArr[layers.ui] = uiCanvas;
 }
 
 function saveLayers() {
@@ -61,13 +61,45 @@ async function playSound(soundArr) {
 
 // Graphics
 
-function updateLvGraphics() {
-  let canvas = real2d(uiCanvas)
-  let lv = String(game.data.level)
-  for (let i = 0; i < lv.length; i++) {
-    canvas[13][3 + i] = lv[i]
+function centerSpewk() {
+  let canvas = real2d(spacesFrame);
+  let oldLayer = fake2d(layersArr[layers.spewk]);
+  console.log(oldLayer);
+  let oldYIndex = -1;
+  let oldXIndex = -1;
+  let destYindex = 6; // hardcode
+  let destXindex = 13; // hardcode
+  for (let [y, line] of oldLayer.entries()) {
+    console.log(y + line);
+    let index = line.indexOf(";_;");
+    if (index != -1) {
+      oldXIndex = index;
+      oldYIndex = y;
+      break;
+    }
   }
-  layersArr[layers.ui] = fake2d(canvas)
+  console.log(`Found y: ${oldYIndex}, x: ${oldXIndex}`);
+  console.log(`Dest y: ${destYindex}, x: ${destXindex}`);
+  let displaceY = destYindex - oldYIndex;
+  let displaceX = destXindex - oldXIndex;
+  console.log(`must displace y: ${displaceY}, x: ${displaceX}`);
+  for (let [y, line] of oldLayer.entries()) {
+    for (let [x, c] of line.split("").entries()) {
+      if (c != " " && c != "" && c != undefined) {
+        canvas[y + displaceY][x + displaceX] = c;
+      }
+    }
+  }
+  layersArr[layers.spewk] = canvas;
+}
+
+function updateLvGraphics() {
+  let canvas = real2d(uiCanvas);
+  let lv = String(game.data.level);
+  for (let i = 0; i < lv.length; i++) {
+    canvas[13][3 + i] = lv[i];
+  }
+  layersArr[layers.ui] = fake2d(canvas);
 }
 
 function animateFood() {
@@ -104,7 +136,7 @@ function moveSpewkRand() {
 }
 
 function moveSprite(sprite, pos = { x: 0, y: 0 }, allowLeave = false) {
-  let tempSprite = real2d(spaces_frame);
+  let tempSprite = real2d(spacesFrame);
   let gotBlocked = false;
   for (y = 0; y < sprite.length; y++) {
     for (x = 0; x < sprite[y].length; x++) {
@@ -137,7 +169,7 @@ function moveSprite(sprite, pos = { x: 0, y: 0 }, allowLeave = false) {
   return tempSprite;
 }
 
-// Game actions
+// Game data actions
 
 function pause() {
   idle = true;
@@ -148,25 +180,25 @@ function levelUp() {
   game.data.xp = 0;
   game.data.availableUps++;
   console.log("### Spewk : I'm itching...");
-  updateLvGraphics()
+  updateLvGraphics();
 }
 
 function gainXP() {
   game.data.xp++;
   if (game.data.xp == game.data.level) {
-    levelUp()
+    levelUp();
   }
 }
 
 function spawnFood(pos = null) {
-  let tempFrame = real2d(spaces_frame);
+  let tempFrame = real2d(spacesFrame);
   let y = -1;
   let x = -1;
-  let ySafeZone = 2
-  let xSafeZone = 6
+  let ySafeZone = 2;
+  let xSafeZone = 6;
   if (pos === null) {
-    y = randTo((default_frame.y - 1) - 2 * ySafeZone) + ySafeZone;
-    x = randTo((default_frame.x - 1) - 2 * xSafeZone) + xSafeZone;
+    y = randTo(default_frame.y - 1 - 2 * ySafeZone) + ySafeZone;
+    x = randTo(default_frame.x - 1 - 2 * xSafeZone) + xSafeZone;
   } else {
     console.log(pos);
     y = pos["y"];
@@ -202,4 +234,11 @@ function getRandomBiome() {
   let availableBiomes = Object.keys(biomes);
   console.log("Available biomes : " + availableBiomes);
   return availableBiomes[randTo(availableBiomes.length - 1)]; // string
+}
+
+function generateName() {
+  return capitalize(
+    randomSyllables[randTo(randomSyllables.length - 1)] +
+      randomSyllables[randTo(randomSyllables.length - 1)],
+  );
 }

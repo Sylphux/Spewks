@@ -64,3 +64,7 @@ function real2d(arr) {
 function fake2d(arr) {
   return arr.map((string) => string.join(""));
 }
+
+function capitalize(s) {
+  return s[0].toUpperCase() + s.substr(1);
+}

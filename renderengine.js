@@ -6,7 +6,7 @@ function renderFrame(arr) {
 
 // merges layers into one 2d array
 function mergeFrames(framesArr) {
-  let result = real2d(spaces_frame); // transform into arr of arr to write in
+  let result = real2d(spacesFrame); // transform into arr of arr to write in
   for (let currentFrame of framesArr) {
     for (y = 0; y < result.length; y++) {
       for (x = 0; x < currentFrame[y].length; x++) {
