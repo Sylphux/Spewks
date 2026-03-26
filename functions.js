@@ -67,16 +67,16 @@ function pause() {
 // Animation
 
 function animateFood() {
-  let pos = game.data.foodPos
-  let actualChar = layersArr[layers.food][pos["y"]][pos["x"]]
+  let pos = game.data.foodPos;
+  let actualChar = layersArr[layers.food][pos["y"]][pos["x"]];
   if (actualChar == foodAnim.at(-1)) {
-      layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[0]
+    layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[0];
   } else {
-    for (let [i, c] of foodAnim.entries()){
-        if (actualChar == c) {
-          layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[i + 1]
-          break
-        }
+    for (let [i, c] of foodAnim.entries()) {
+      if (actualChar == c) {
+        layersArr[layers.food][pos["y"]][pos["x"]] = foodAnim[i + 1];
+        break;
+      }
     }
   }
 }

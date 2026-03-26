@@ -62,7 +62,8 @@ let sounds = {
 const audioContext = new AudioContext();
 let audioElement = null;
 
-Object.keys(sounds).forEach((key) => { // adding sounds to DOM
+Object.keys(sounds).forEach((key) => {
+  // adding sounds to DOM
   for (let sound of sounds[key]) {
     let tempSound = document.createElement("audio");
     tempSound.id = sound;
@@ -103,7 +104,7 @@ function loadGame() {
   if (temp != null) {
     game = temp;
     loadLayers();
-    spawnFood(game.data.foodPos)
+    spawnFood(game.data.foodPos);
     console.log("Loaded save from local storage.");
     return true;
   }
@@ -141,4 +142,4 @@ function verifyAbsence() {
   }
 }
 
-verifyAbsence()
+verifyAbsence();

@@ -21,10 +21,10 @@ function mergeFrames(framesArr) {
 
 // input : selects non empty layers to send to merge
 function mergeAndRender() {
-  let framesArr = []
-  for (let i of layersArr){
+  let framesArr = [];
+  for (let i of layersArr) {
     if (i != "") {
-      framesArr.push(i)
+      framesArr.push(i);
     }
   }
   renderFrame(mergeFrames(framesArr));
