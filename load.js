@@ -142,6 +142,9 @@ function verifyAbsence() {
   } else {
     game.data.lastSeen = new Date();
   }
+  if (absence >= absenceUntilFoodReset) {
+    spawnFood()
+  }
 }
 
 verifyAbsence();

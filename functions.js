@@ -160,11 +160,13 @@ function gainXP() {
 
 function spawnFood(pos = null) {
   let tempFrame = real2d(spaces_frame);
-  let y = 0;
-  let x = 0;
+  let y = -1;
+  let x = -1;
+  let ySafeZone = 2
+  let xSafeZone = 6
   if (pos === null) {
-    y = randTo(default_frame.y - 1);
-    x = randTo(default_frame.x - 1);
+    y = randTo((default_frame.y - 1) - 2 * ySafeZone) + ySafeZone;
+    x = randTo((default_frame.x - 1) - 2 * xSafeZone) + xSafeZone;
   } else {
     console.log(pos);
     y = pos["y"];
