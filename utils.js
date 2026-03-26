@@ -1,20 +1,20 @@
 // Cookies
 
 function setCookie(cname, val, exdays = 400) {
-  cvalue = JSON.stringify(val)
+  cvalue = JSON.stringify(val);
   const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  let expires = "expires=" + d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) == " ") {
       c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
@@ -24,36 +24,36 @@ function getCookie(cname) {
   return "";
 }
 
-function deleteCookie(name){
+function deleteCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  checkForCookies()
-  checkUnsaved()
+  checkForCookies();
+  checkUnsaved();
 }
 
 // Local storage
 
-function save(key, value){
-  localStorage.setItem(key, JSON.stringify(value))
+function save(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
-function load(key){
-  return JSON.parse(localStorage.getItem(key))
+function load(key) {
+  return JSON.parse(localStorage.getItem(key));
 }
 
 // Math
 
-function randTo(n){
-  return Math.floor(Math.random() * (n + 1))
+function randTo(n) {
+  return Math.floor(Math.random() * (n + 1));
 }
 
 function milliToDays(ms) {
-  let day = 1000 * 60 * 60 * 24
-  return Math.round(ms / 1000 / 60 / 60 / 24)
+  let day = 1000 * 60 * 60 * 24;
+  return Math.round(ms / 1000 / 60 / 60 / 24);
 }
 
 // Other
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // pause an async func with wait delay(n)
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // pause an async func with wait delay(n)
 
 // turns arr of strings into arr of arr
 function real2d(arr) {

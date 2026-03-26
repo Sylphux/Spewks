@@ -25,7 +25,7 @@ async function animateMap() {
   while (!idle) {
     await delay(halfRefreshRate);
     if (f < biomeFrames.length) {
-      layersArr[layers.bg] = biomeFrames[f]
+      layersArr[layers.bg] = biomeFrames[f];
       f++;
     } else {
       f = 0;
@@ -36,14 +36,14 @@ async function animateMap() {
 async function autoSave() {
   while (!idle) {
     await delay(autoSaveDelay);
-    saveGame()
+    saveGame();
   }
 }
 
 async function animateItems() {
   while (!idle) {
     await delay(itemAnimSpeed);
-    animateFood()
+    animateFood();
   }
 }
 
@@ -52,10 +52,10 @@ async function animateItems() {
 function play() {
   idle = false;
   animateMap();
-  animateItems()
+  animateItems();
   spewkLives();
   renderFrames();
-  autoSave()
+  autoSave();
 }
 
 function playPause() {
@@ -72,4 +72,4 @@ function launch() {
   }
 }
 
-launch()
+launch();
