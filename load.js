@@ -66,7 +66,7 @@ Object.keys(sounds).forEach((key) => { // adding sounds to DOM
   for (let sound of sounds[key]) {
     let tempSound = document.createElement("audio");
     tempSound.id = sound;
-    tempSound.src = `Audio/${sound}`;
+    tempSound.src = `Assets/Audio/${sound}`;
     tempSound.autoplay = false;
     document.getElementById("audio_files").appendChild(tempSound);
   }
@@ -77,6 +77,7 @@ Object.keys(sounds).forEach((key) => { // adding sounds to DOM
 console.log("Loading graphics (layers layout)...");
 
 let layersArr = new Array(20).fill("");
+
 const layers = {
   bg: 0,
   food: 9,
@@ -128,12 +129,16 @@ let biomeFrames = biomes[game.graphics.background];
 
 console.log("Loading gameplay elements...");
 
-let today = Date.parse(new Date());
-let lastSeen = Date.parse(game.data.lastSeen);
-let absence = milliToDays(today) - milliToDays(lastSeen);
-console.log("Absent for : " + absence + " days.");
-if (absence > 14) {
-  spewkFoundDead();
-} else {
-  game.data.lastSeen = new Date();
+function verifyAbsence() {
+  let today = Date.parse(new Date());
+  let lastSeen = Date.parse(game.data.lastSeen);
+  let absence = milliToDays(today) - milliToDays(lastSeen);
+  console.log("Absent for : " + absence + " days.");
+  if (absence > timeAloneBeforeDeath) {
+    spewkFoundDead();
+  } else {
+    game.data.lastSeen = new Date();
+  }
 }
+
+verifyAbsence()
