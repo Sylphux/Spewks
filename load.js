@@ -99,7 +99,8 @@ let layersArr = new Array(20).fill("");
 
 const layers = {
   bg: 0,
-  food: 9,
+  food: 5,
+  guest: 9,
   spewk: 10,
   ui: 20,
 };

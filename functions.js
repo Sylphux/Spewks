@@ -162,7 +162,7 @@ function animateFood() {
   }
 }
 
-function moveSpewkRand() {
+function moveSpewkRand(guest = false) {
   let y = 0;
   let x = 0;
   let rand = randTo(20) - 10;
@@ -173,9 +173,13 @@ function moveSpewkRand() {
   if (Math.abs(rand) >= 10) {
     x = rand / 10;
   }
-  let oldFrame = layersArr[layers.spewk];
-  layersArr[layers.spewk] = moveSprite(oldFrame, { x: x, y: y });
-  if (JSON.stringify(oldFrame) != JSON.stringify(layersArr[layers.spewk])) {
+  let movingLayer = layers.spewk
+  if (guest) {
+    movingLayer = layers.guest
+  }
+  let oldFrame = layersArr[movingLayer];
+  layersArr[movingLayer] = moveSprite(oldFrame, { x: x, y: y });
+  if (JSON.stringify(oldFrame) != JSON.stringify(layersArr[movingLayer])) {
     playSound(sounds.spewkSteps);
   }
 }
