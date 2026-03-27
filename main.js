@@ -72,4 +72,15 @@ function launch() {
   }
 }
 
+// Listeners
+
+commandLineInput.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    console.log("Keypress: Enter");
+    userSends(commandLineInput.value);
+  }
+});
+
+//
+
 launch();

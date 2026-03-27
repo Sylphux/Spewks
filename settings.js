@@ -5,6 +5,7 @@ let timeAloneBeforeDeath = 14;
 let idle = false; // If set to true, the game will launch in a paused state
 let onlyNewGame = false;
 let absenceUntilFoodReset = 2;
+let defaultDevToolsDisplay = "none"; // or "flex"
 
 // Do not touch those unless...
 let default_frame = { x: 30, y: 14 }; // do not touch

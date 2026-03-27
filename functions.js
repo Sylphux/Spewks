@@ -59,18 +59,54 @@ async function playSound(soundArr) {
   }
 }
 
+// Terminal interactions
+
+function log(s) {
+  // prints a string to the ingame terminal
+  let lineJump = "<br>";
+  if (terminalP.innerHTML == "") {
+    lineJump = "";
+  }
+  terminalP.innerHTML = terminalP.innerHTML + lineJump + s;
+}
+
+function formatUserMessage(s) {
+  s = s.trim();
+  return s;
+}
+
+function userSends(s) {
+  // first input
+  commandLineInput.value = "";
+  let formattedMessage = formatUserMessage(s);
+  if (formattedMessage == "") {
+    return;
+  }
+  log("You: " + s);
+  // Here goes all the funcs
+  if (userCommand(formattedMessage)) {
+    return; // if the message is a command, return (after command executed)
+  }
+}
+
+function userCommand(s) {
+  if (s == "tools") {
+    toggleDevControls();
+    return true;
+  }
+  return false; // returns false if not a command
+}
+
 // Graphics
 
 function centerSpewk() {
   let canvas = real2d(spacesFrame);
   let oldLayer = fake2d(layersArr[layers.spewk]);
-  console.log(oldLayer);
   let oldYIndex = -1;
   let oldXIndex = -1;
   let destYindex = 6; // hardcode
   let destXindex = 13; // hardcode
   for (let [y, line] of oldLayer.entries()) {
-    console.log(y + line);
     let index = line.indexOf(";_;");
     if (index != -1) {
       oldXIndex = index;
@@ -78,11 +114,11 @@ function centerSpewk() {
       break;
     }
   }
-  console.log(`Found y: ${oldYIndex}, x: ${oldXIndex}`);
-  console.log(`Dest y: ${destYindex}, x: ${destXindex}`);
+  // console.log(`Found y: ${oldYIndex}, x: ${oldXIndex}`);
+  // console.log(`Dest y: ${destYindex}, x: ${destXindex}`);
   let displaceY = destYindex - oldYIndex;
   let displaceX = destXindex - oldXIndex;
-  console.log(`must displace y: ${displaceY}, x: ${displaceX}`);
+  // console.log(`must displace y: ${displaceY}, x: ${displaceX}`);
   for (let [y, line] of oldLayer.entries()) {
     for (let [x, c] of line.split("").entries()) {
       if (c != " " && c != "" && c != undefined) {
@@ -96,8 +132,8 @@ function centerSpewk() {
 function updateLvGraphics() {
   let canvas = real2d(uiCanvas);
   let lv = String(game.data.level);
-  let y = 13
-  let x = 3
+  let y = 13;
+  let x = 3;
   for (let i = 0; i < lv.length; i++) {
     canvas[y][x + i] = lv[i];
   }
@@ -184,7 +220,7 @@ function levelUp() {
   game.data.level++;
   game.data.xp = 0;
   game.data.availableUps++;
-  console.log("### Spewk : I'm itching...");
+  log(game.data.name + ": I'm itching...");
   updateLvGraphics();
 }
 
@@ -205,7 +241,6 @@ function spawnFood(pos = null) {
     y = randTo(default_frame.y - 1 - 2 * ySafeZone) + ySafeZone;
     x = randTo(default_frame.x - 1 - 2 * xSafeZone) + xSafeZone;
   } else {
-    console.log(pos);
     y = pos["y"];
     x = pos["x"];
   }
@@ -217,7 +252,7 @@ function spawnFood(pos = null) {
 function spewkFoundDead() {
   console.log("Your spewk died of sadness.");
   game.data.alive = false;
-  layersArr[layers.spewk] = tomb
+  layersArr[layers.spewk] = tomb;
 }
 
 // Checks

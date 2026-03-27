@@ -1,5 +1,22 @@
 console.clear();
 
+// DOM
+
+const commandLineInput = document.getElementById("command_line");
+const terminalP = document.getElementById("terminal");
+const devControls = document.getElementById("dev_controls");
+
+devControls.style.display = defaultDevToolsDisplay;
+
+function toggleDevControls() {
+  let display = devControls.style.display;
+  if (display != "none") {
+    devControls.style.display = "none";
+  } else {
+    devControls.style.display = "flex";
+  }
+}
+
 // Templates
 
 console.log("Loading templates...");

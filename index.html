@@ -10,20 +10,38 @@
   <body>
     <header>
       <h1>Spewks</h1>
-      <p>Little spewks will grow strong.</p>
+      <p>Little spewks will grow strong!</p>
     </header>
-    <pre id="rendered_frame">No render.</pre>
-    <div class="controls">
-      <button onclick="playPause()">Play / Pause</button>
-      <button onclick="console.log(game)">Get game info</button>
-      <button onclick="playSound(sounds.spewkIhu)">Playsound</button>
-      <button id="toggle_sound" onclick="toggleSound()">🕨</button>
-      <button onclick="console.log(audioContext.state)">Get sound state</button>
-      <button>Upgrade sequence</button>
-      <button onclick="levelUp()">Level up</button>
-      <button onclick="reset()">Reset</button>
-      <button onclick="centerSpewk()">Center</button>
+
+    <div id="play_zone">
+      <pre id="rendered_frame">No render.</pre>
+      <div id="chat_zone">
+        <p id="terminal"></p>
+        <div id="command_line_box">
+          <pre id="dollar_sign_term"># </pre>
+          <input id="command_line" text="" />
+        </div>
+      </div>
     </div>
+
+    <div id="controls_zone">
+      <div id="dev_controls" class="controls">
+        <button onclick="playPause()">Play / Pause</button>
+        <button onclick="console.log(game)">Get game info</button>
+        <button onclick="playSound(sounds.spewkIhu)">Playsound</button>
+        <button onclick="console.log(audioContext.state)">
+          Get sound state
+        </button>
+        <button>Upgrade sequence</button>
+        <button onclick="levelUp()">Level up</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="centerSpewk()">Center</button>
+      </div>
+      <div id="player_controls" class="controls">
+        <button id="toggle_sound" onclick="toggleSound()">🕨</button>
+      </div>
+    </div>
+
     <div id="hidden_stuff">
       <div id="audio_files"></div>
     </div>

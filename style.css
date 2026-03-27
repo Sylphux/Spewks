@@ -13,10 +13,13 @@
   --dark: rgb(7, 12, 59);
   --darker: rgb(3, 6, 29);
   --medium: rgb(45, 23, 87);
+  --gameFontSize: 21px;
+  --siteFontSize: 15px;
 }
 
 * {
   font-family: JetBrains;
+  font-size: var(--siteFontSize);
 }
 
 a {
@@ -40,24 +43,30 @@ body {
   padding: 0px;
   min-height: 100vh;
   display: flex;
+  gap: 1rem;
   flex-direction: column;
-  align-content: space-around;
-  text-align: center;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: nowrap;
 }
 
 header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   background-color: var(--medium);
-  padding: 1rem;
-  padding-top: 0px;
+  padding-bottom: 1rem;
+  width: 100%;
 }
 
 footer {
-  padding: 1rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
   background-color: var(--medium);
 }
 
@@ -77,14 +86,74 @@ h1 {
   font-size: 48pt;
 }
 
+#play_zone {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: black;
+  max-width: 100%;
+}
+
+#chat_zone {
+  max-width: 100%;
+  max-width: 378px; /* temporary hardcode */
+}
+
+#terminal {
+  color: var(--text);
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: auto;
+  background-color: black;
+  max-height: 80px;
+  margin: 0px;
+  /* to avoir scrollbar on IE, edge and firefox */
+  scrollbar-width: 0px;
+  -ms-overflow-style: none;
+  overflow-wrap: break-word;
+}
+
+/* to avoir scrollbar on chrome, safari and opera */
+#terminal::-webkit-scrollbar {
+  display: none;
+}
+
+#command_line_box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: end;
+  padding: 0px;
+  margin: 0px;
+  background-color: black;
+}
+
+#dollar_sign_term {
+  padding: 0px;
+  margin: 0px;
+}
+
+#command_line {
+  color: var(--text);
+  background-color: rgb(0, 0, 0);
+  padding: 0px;
+  border-style: none;
+  outline: none;
+  width: 100%;
+}
+
 #rendered_frame {
-  align-self: center;
+  max-width: 100%;
   font-family: monospace;
   white-space: pre;
   background-color: black;
-  font-size: 16pt;
-  padding: 16px;
-  border-radius: 4px;
+  margin: 0px;
+  padding: 0px;
+  font-size: clamp(1px, 5vw, var(--gameFontSize));
 }
 
 button {
