@@ -96,8 +96,13 @@ function centerSpewk() {
 function updateLvGraphics() {
   let canvas = real2d(uiCanvas);
   let lv = String(game.data.level);
+  let y = 13
+  let x = 3
   for (let i = 0; i < lv.length; i++) {
-    canvas[13][3 + i] = lv[i];
+    canvas[y][x + i] = lv[i];
+  }
+  if (game.data.availableUps > 0) {
+    canvas[y][x + lv.length] = "⮭";
   }
   layersArr[layers.ui] = fake2d(canvas);
 }
@@ -210,8 +215,9 @@ function spawnFood(pos = null) {
 }
 
 function spewkFoundDead() {
-  console("Your spewk died of sadness.");
+  console.log("Your spewk died of sadness.");
   game.data.alive = false;
+  layersArr[layers.spewk] = tomb
 }
 
 // Checks

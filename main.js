@@ -8,7 +8,7 @@ async function renderFrames() {
 }
 
 async function spewkLives() {
-  while (!idle) {
+  while (!idle && game.data.alive) {
     await delay(500);
     if (game.data.intention == "none") {
       moveSpewkRand();
