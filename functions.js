@@ -61,6 +61,10 @@ async function playSound(soundArr) {
 
 // Terminal interactions
 
+function focusTerminal() {
+  commandLineInput.focus()
+}
+
 function log(s) {
   // prints a string to the ingame terminal
   let lineJump = "<br>";
