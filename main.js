@@ -4,14 +4,13 @@
 
 async function renderFrames() {
   while (!idle) {
-    await delay(refreshRate);
     mergeAndRender();
+    await delay(refreshRate);
   }
 }
 
 async function spewkLives() {
   while (!idle && game.data.alive) {
-    await delay(500);
     if (game.data.intention == "none") {
       moveSpewkRand();
     }
@@ -22,33 +21,34 @@ async function spewkLives() {
       spawnFood();
       gainXP();
     }
+    await delay(500);
   }
 }
 
 async function animateMap() {
   let f = 0;
   while (!idle) {
-    await delay(halfRefreshRate);
     if (f < biomeFrames.length) {
       layersArr[layers.bg] = biomeFrames[f];
       f++;
     } else {
       f = 0;
     }
+    await delay(halfRefreshRate);
   }
 }
 
 async function autoSave() {
   while (!idle) {
-    await delay(autoSaveDelay);
     saveGame();
+    await delay(autoSaveDelay);
   }
 }
 
 async function animateItems() {
   while (!idle) {
-    await delay(itemAnimSpeed);
     animateFood();
+    await delay(itemAnimSpeed);
   }
 }
 
@@ -83,14 +83,14 @@ function launch() {
 // LISTENERS
 /////////////////////////////////////////
 
-commandLineInput.addEventListener('keydown', (event) => {
-    const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-    if (key === "Enter") {
-      userSends(commandLineInput.value);
-    }
-    if (key === "ArrowUp" || key === "ArrowDown") {
-      navThroughLastMessages(key)
-    }
+commandLineInput.addEventListener("keydown", (event) => {
+  const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+  if (key === "Enter") {
+    userSends(commandLineInput.value);
+  }
+  if (key === "ArrowUp" || key === "ArrowDown") {
+    navThroughLastMessages(key);
+  }
 });
 
 /////////////////////////////////////////
@@ -98,3 +98,5 @@ commandLineInput.addEventListener('keydown', (event) => {
 /////////////////////////////////////////
 
 launch();
+
+// upgradeSpewk();

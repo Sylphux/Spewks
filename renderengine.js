@@ -16,6 +16,7 @@ function mergeFrames(framesArr) {
       }
     }
   }
+  renderedFrame = fake2d(result);
   return fake2d(result);
 }
 

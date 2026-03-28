@@ -6,14 +6,17 @@ function userSends(s) {
   // first input
   commandLineInput.value = "";
   let formattedMessage = formatUserMessage(s);
-  if (formattedMessage == "" || scan("<>{}[]/%*$;'\"\\", s, true)) {
-    console.log("No message sent.")
-    chatError()
+  if (
+    (!inAProgram && formattedMessage == "") ||
+    scan("<>{}[]/%*$;'\"\\", s, true)
+  ) {
+    console.log("No message sent.");
+    chatError();
     return;
   }
   sessionMessages.push(s);
   msgNavIndex = sessionMessages.length;
-  log("You: " + s);
+  playerSays(s);
   // Here goes all the funcs
   if (!inAProgram && userCommand(formattedMessage)) {
     return; // if the message is a command, return (after command executed)
@@ -100,10 +103,14 @@ function userCommand(s) {
 
 function spewkSays(s, guest = false) {
   if (guest) {
-    log(game.guest.data.name + ": " + s)
+    log(game.guest.data.name + ": " + s);
   } else {
-    log(game.data.name + ": " + s)
+    log(game.data.name + ": " + s);
   }
+}
+
+function playerSays(s) {
+  log(playerPrefix + s);
 }
 
 function focusTerminal() {
@@ -142,6 +149,12 @@ function navThroughLastMessages(key) {
 /////////////////////////////////////////
 // GRAPHICS
 /////////////////////////////////////////
+
+function clearLayers() {
+  for (let [i, layer] of layersArr.entries()) {
+    layersArr[i] = "";
+  }
+}
 
 function centerSpewk() {
   let canvas = real2d(spacesFrame);
@@ -258,6 +271,82 @@ function moveSprite(sprite, pos = { x: 0, y: 0 }, allowLeave = false) {
 // USER ACTIONS
 /////////////////////////////////////////
 
+function drawUpgradeUI(yNumber, availableChars = 1) {
+  let result = [...upgradeUICanvas];
+
+  for (let [y, line] of result.entries()) {
+    if (y == result.length - 1) {
+      break;
+    }
+    result[y] =
+      "#".repeat(xSafeZone) +
+      " ".repeat(result[y].length - 2 * xSafeZone) +
+      "#".repeat(xSafeZone);
+    if (y < ySafeZone || ySafeZone > result.length - 1 - y) {
+      result[y] = "##############################";
+    }
+    if (y == yNumber) {
+      result[y] =
+        "-".repeat(xSafeZone) +
+        " ".repeat(result[y].length - 2 * xSafeZone) +
+        "-".repeat(xSafeZone);
+    }
+  }
+  result[result.length - 1] = result[result.length - 1].replace(
+    "LL",
+    yNumber + 1,
+  );
+  result[result.length - 1] = result[result.length - 1].replace(
+    "CC",
+    availableChars,
+  );
+  return result;
+}
+
+async function upgradeSpewk() {
+  centerSpewk();
+  pause();
+  inAProgram = true;
+  let validUpgrade = false;
+  let spewk = layersArr[layers.spewk];
+  let editedSpewk = fake2d(spewk);
+  clearLayers();
+
+  for (let [y, line] of editedSpewk.entries()) {
+    // editing each line one by one
+    if (y == editedSpewk.length - ySafeZone) {
+      break;
+    }
+    layersArr[layers.spewk] = editedSpewk;
+    layersArr[layers.ui] = drawUpgradeUI(y);
+    mergeAndRender();
+    if (y < ySafeZone || ySafeZone > spacesFrame.length - 1 - y) {
+      console.log(renderedFrame[y]);
+      playerSays(renderedFrame[y]);
+      continue;
+    }
+    commandLineInput.value = renderedFrame[y];
+    let beforeMsgCount = sessionMessages.length;
+    // Input waiter
+    while (beforeMsgCount == sessionMessages.length) {
+      await delay(40);
+    }
+    let treatedLine = sessionMessages.at(-1);
+    treatedLine = treatedLine
+      .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone))
+      .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone));
+    editedSpewk[y] = treatedLine;
+  }
+
+  console.log("Spewk edited : ");
+  console.log(editedSpewk);
+  clearLayers();
+  game.graphics.spewk = real2d(editedSpewk);
+  loadLayers();
+  play();
+  inAProgram = false;
+}
+
 function pause() {
   idle = true;
 }
@@ -307,7 +396,7 @@ function levelUp() {
   game.data.level++;
   game.data.xp = 0;
   game.data.availableUps++;
-  spewkSays("I'm itching...")
+  spewkSays("I'm itching...");
   updateLvGraphics();
 }
 
@@ -322,8 +411,6 @@ function spawnFood(pos = null) {
   let tempFrame = real2d(spacesFrame);
   let y = -1;
   let x = -1;
-  let ySafeZone = 2;
-  let xSafeZone = 6;
   if (pos === null) {
     y = randTo(default_frame.y - 1 - 2 * ySafeZone) + ySafeZone;
     x = randTo(default_frame.x - 1 - 2 * xSafeZone) + xSafeZone;
@@ -351,7 +438,7 @@ function checkIfAte() {
   let tempPos = game.data.foodPos;
   console.log();
   if (spewk[tempPos.y][tempPos.x] != " ") {
-    spewkSays("Yum!")
+    spewkSays("Yum!");
     playSound(sounds.spewkEats);
     return true;
   }
@@ -412,6 +499,7 @@ function loadLayers() {
   layersArr[layers.bg] = biomes[game.graphics.background][0];
   layersArr[layers.spewk] = game.graphics.spewk;
   layersArr[layers.ui] = uiCanvas;
+  spawnFood(game.data.foodPos);
 }
 
 function saveLayers() {

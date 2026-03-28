@@ -15,6 +15,10 @@ let msgNavIndex = sessionMessages.length;
 const commandLineInput = document.getElementById("command_line");
 const terminalP = document.getElementById("terminal");
 const devControls = document.getElementById("dev_controls");
+const updateArea = document.getElementById("update_area");
+const terminalSign = document.getElementById("dollar_sign_term");
+
+terminalSign.innerHTML = playerPrefix;
 
 devControls.style.display = defaultDevToolsDisplay;
 
@@ -123,6 +127,7 @@ const layers = {
 };
 
 let biomeFrames = null;
+let renderedFrame = [];
 
 /////////////////////////////////////////
 // LOAD SAVE DATA OR NEW GAME
@@ -138,8 +143,8 @@ function createNewGame() {
   game.graphics.spewk = drawNewSpewk(game.graphics.spewkFace);
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();
-  loadLayers();
   spawnFood();
+  loadLayers();
 }
 
 function loadGame() {
@@ -147,7 +152,6 @@ function loadGame() {
   if (temp != null) {
     game = temp;
     loadLayers();
-    spawnFood(game.data.foodPos);
     updateLvGraphics();
     console.log("Loaded save from local storage.");
     return true;
