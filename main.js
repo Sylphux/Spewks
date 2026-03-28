@@ -83,11 +83,14 @@ function launch() {
 // LISTENERS
 /////////////////////////////////////////
 
-commandLineInput.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    console.log("Keypress: Enter");
-    userSends(commandLineInput.value);
-  }
+commandLineInput.addEventListener('keydown', (event) => {
+    const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+    if (key === "Enter") {
+      userSends(commandLineInput.value);
+    }
+    if (key === "ArrowUp" || key === "ArrowDown") {
+      navThroughLastMessages(key)
+    }
 });
 
 /////////////////////////////////////////

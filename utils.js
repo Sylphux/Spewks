@@ -67,8 +67,18 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // paus
 // STRINGS
 /////////////////////////////////////////
 
-function scan(string, sub) {
-  return string.indexOf(sub) != -1;
+function scan(string, sub, scanChars = false) {
+  // if scanChars is true, it will scan for each char of sub instead of "sub"
+  if (!scanChars) {
+    return string.indexOf(sub) != -1;
+  } else {
+    for (let c of sub){
+      if (scan(string, c)){
+        return true
+      }
+    }
+  }
+  return false
 }
 
 function capitalize(s) {

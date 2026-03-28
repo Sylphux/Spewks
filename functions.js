@@ -6,12 +6,16 @@ function userSends(s) {
   // first input
   commandLineInput.value = "";
   let formattedMessage = formatUserMessage(s);
-  if (formattedMessage == "") {
+  if (formattedMessage == "" || scan("<>{}[]/%*$;'\"\\", s, true)) {
+    console.log("No message sent.")
+    chatError()
     return;
   }
+  sessionMessages.push(s);
+  msgNavIndex = sessionMessages.length;
   log("You: " + s);
   // Here goes all the funcs
-  if (userCommand(formattedMessage)) {
+  if (!inAProgram && userCommand(formattedMessage)) {
     return; // if the message is a command, return (after command executed)
   }
 }
@@ -26,16 +30,27 @@ function log(s) {
 }
 
 function chatError() {
-  log(game.data.name + ": ???");
+  spewkSays("???");
 }
 
 function formatUserMessage(s) {
   s = s.trim();
+  s = s.toLowerCase();
+  s = s.split(" ");
+  // implement abbreviations replacement here
+  console.log("Formatted message : " + s);
   return s;
 }
 
+function isQuestion(s) {
+  if (s.at(-1) == "?") {
+    console.log("User sent a question");
+    return true;
+  }
+  return false;
+}
+
 function getHelp() {
-  // later add specific commands help
   let helpMessage = [
     narratorName + ": Here are some things you can ask your spewk...",
     " -'wander' gives you a code to send your spewk traveling.",
@@ -76,15 +91,52 @@ function userCommand(s) {
     spewkFoundDead();
     return true;
   }
-  if (scan(s, "hey") || scan(s, "hello") || scan(s, "!")) {
-    log(game.data.name + ": Ihu!");
+  if (scan(s, ["hey", "hello", "wassup", "what's up", "hi", "!", "yo"], true)) {
+    spewkSays("Ihu!");
     playSound(sounds.spewkIhu);
   }
   return false; // returns false if not a command
 }
 
+function spewkSays(s, guest = false) {
+  if (guest) {
+    log(game.guest.data.name + ": " + s)
+  } else {
+    log(game.data.name + ": " + s)
+  }
+}
+
 function focusTerminal() {
   commandLineInput.focus();
+}
+
+function navThroughLastMessages(key) {
+  if (sessionMessages.length <= 0) {
+    return;
+  }
+  if (key === "ArrowUp") {
+    if (commandLineInput.value == "") {
+      msgNavIndex = sessionMessages.length;
+    }
+    if (msgNavIndex > 0) {
+      msgNavIndex -= 1;
+    } else if (msgNavIndex == 0) {
+      commandLineInput.value = "";
+      msgNavIndex = sessionMessages.length;
+      return;
+    }
+  }
+  if (key === "ArrowDown") {
+    if (commandLineInput.value == "") {
+      msgNavIndex = 0;
+    } else if (msgNavIndex < sessionMessages.length - 1) {
+      msgNavIndex += 1;
+    } else if (msgNavIndex == sessionMessages.length - 1) {
+      commandLineInput.value = "";
+      return;
+    }
+  }
+  commandLineInput.value = sessionMessages[msgNavIndex];
 }
 
 /////////////////////////////////////////
@@ -255,7 +307,7 @@ function levelUp() {
   game.data.level++;
   game.data.xp = 0;
   game.data.availableUps++;
-  log(game.data.name + ": I'm itching...");
+  spewkSays("I'm itching...")
   updateLvGraphics();
 }
 
@@ -299,7 +351,7 @@ function checkIfAte() {
   let tempPos = game.data.foodPos;
   console.log();
   if (spewk[tempPos.y][tempPos.x] != " ") {
-    log(game.data.name + ": Yum!");
+    spewkSays("Yum!")
     playSound(sounds.spewkEats);
     return true;
   }
