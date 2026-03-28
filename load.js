@@ -1,6 +1,8 @@
 console.clear();
 
-// DOM
+/////////////////////////////////////////
+// DOM STUFF
+/////////////////////////////////////////
 
 const commandLineInput = document.getElementById("command_line");
 const terminalP = document.getElementById("terminal");
@@ -17,13 +19,16 @@ function toggleDevControls() {
   }
 }
 
-// Templates
+/////////////////////////////////////////
+// TEMPLATES
+/////////////////////////////////////////
 
 console.log("Loading templates...");
 
 let game = {
   graphics: {
     background: "",
+    spewkFace: "",
     spewk: [],
   },
   data: {
@@ -38,9 +43,12 @@ let game = {
     foodPos: { x: -1, y: -1 },
     alive: true,
   },
+  guest: null,
 };
 
-// Audio
+/////////////////////////////////////////
+// AUDIO
+/////////////////////////////////////////
 
 console.log("Loading audio...");
 
@@ -91,10 +99,11 @@ Object.keys(sounds).forEach((key) => {
   }
 });
 
-// Graphics (layers)
+/////////////////////////////////////////
+// GRAPHICS CANVAS
+/////////////////////////////////////////
 
 console.log("Loading graphics (layers layout)...");
-
 let layersArr = new Array(20).fill("");
 
 const layers = {
@@ -105,7 +114,11 @@ const layers = {
   ui: 20,
 };
 
-// Game data loading
+let biomeFrames = null;
+
+/////////////////////////////////////////
+// LOAD SAVE DATA OR NEW GAME
+/////////////////////////////////////////
 
 console.log("Loading game...");
 
@@ -113,7 +126,8 @@ function createNewGame() {
   console.log("Creating new game.");
   game.graphics.background = getRandomBiome(); // string
   game.data.name = generateName();
-  game.graphics.spewk = newSpewk;
+  game.graphics.spewkFace = spewkFaces[randTo(spewkFaces.length - 1)];
+  game.graphics.spewk = drawNewSpewk(game.graphics.spewkFace);
   game.data.startDate = new Date();
   game.data.lastSeen = new Date();
   loadLayers();
@@ -142,29 +156,14 @@ if (onlyNewGame) {
   }
 }
 
-// Graphics (background)
-
-console.log("Loading graphics (biome)...");
-
-let biomeFrames = biomes[game.graphics.background];
-
-// Gameplay
-
-console.log("Loading gameplay elements...");
-
-function verifyAbsence() {
-  let today = Date.parse(new Date());
-  let lastSeen = Date.parse(game.data.lastSeen);
-  let absence = milliToDays(today) - milliToDays(lastSeen);
-  console.log("Absent for : " + absence + " days.");
-  if (absence > timeAloneBeforeDeath) {
-    spewkFoundDead();
-  } else {
-    game.data.lastSeen = new Date();
-  }
-  if (absence >= absenceUntilFoodReset) {
-    spawnFood();
-  }
+if (spawnFakeGuest) {
+  inviteSpewk(specialGuest);
 }
+
+lookForGuest();
+
+/////////////////////////////////////////
+// PRE-GAME CHECKS
+/////////////////////////////////////////
 
 verifyAbsence();

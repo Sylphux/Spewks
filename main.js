@@ -1,4 +1,6 @@
-// Processes
+/////////////////////////////////////////
+// PROCESSES
+/////////////////////////////////////////
 
 async function renderFrames() {
   while (!idle) {
@@ -12,6 +14,9 @@ async function spewkLives() {
     await delay(500);
     if (game.data.intention == "none") {
       moveSpewkRand();
+    }
+    if (game.guest != null) {
+      moveSpewkRand(true); // true param moves the guest
     }
     if (checkIfAte()) {
       spawnFood();
@@ -47,7 +52,9 @@ async function animateItems() {
   }
 }
 
-// Run
+/////////////////////////////////////////
+// TOP LEVEL STATUS FUNCTIONS
+/////////////////////////////////////////
 
 function play() {
   idle = false;
@@ -72,7 +79,9 @@ function launch() {
   }
 }
 
-// Listeners
+/////////////////////////////////////////
+// LISTENERS
+/////////////////////////////////////////
 
 commandLineInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
@@ -81,6 +90,8 @@ commandLineInput.addEventListener("keypress", function (e) {
   }
 });
 
-//
+/////////////////////////////////////////
+// EXECUTE
+/////////////////////////////////////////
 
 launch();

@@ -19,7 +19,11 @@
         <p id="terminal"></p>
         <div id="command_line_box">
           <pre id="dollar_sign_term"># </pre>
-          <input id="command_line" text="" />
+          <input
+            id="command_line"
+            text=""
+            placeholder="Start chatting or type 'help'"
+          />
         </div>
       </div>
     </div>
@@ -38,7 +42,7 @@
         <button onclick="centerSpewk()">Center</button>
       </div>
       <div id="player_controls" class="controls">
-        <button id="toggle_sound" onclick="toggleSound()">🕨</button>
+        <button id="toggle_sound" onclick="toggleSound()">Sound OFF</button>
       </div>
     </div>
 
@@ -55,10 +59,11 @@
 
   <script src="utils.js"></script>
   <script src="settings.js"></script>
-  <script src="frames.js"></script>
-  <script src="customdict.js"></script>
+  <script src="data_declaration.js"></script>
+  <script src="ascii_graphics.js"></script>
+  <script src="custom_dict.js"></script>
+  <script src="renderengine.js"></script>
   <script src="functions.js"></script>
   <script src="load.js"></script>
-  <script src="renderengine.js"></script>
   <script src="main.js"></script>
 </html>
