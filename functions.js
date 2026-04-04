@@ -5,26 +5,38 @@
 function userSends(s) {
   // first input
   commandLineInput.value = "";
+
+  // If in a program, only outputs
+  if (inAProgram) {
+    playerSays(s)
+    sessionMessages.push(s);
+    msgNavIndex = sessionMessages.length;
+    return
+  }
+
+  // format message for analysis
   let formattedMessage = formatUserMessage(s);
-  if (
-    (!inAProgram && formattedMessage == "") ||
-    scan("<>{}[]/%*$;'\"\\", s, true)
-  ) {
+
+  // verifies message is meaningful
+  if (formattedMessage == "" || scan("<>{}[]/%*$;'\"\\", s, true)) {
     console.log("No message sent.");
     chatError();
     return;
   }
+
   sessionMessages.push(s);
   msgNavIndex = sessionMessages.length;
   playerSays(s);
-  // Here goes all the funcs
-  if (!inAProgram && userCommand(formattedMessage)) {
-    return; // if the message is a command, return (after command executed)
+
+  // COMMANDS
+  if (userCommand(formattedMessage)) {
+    return;
   }
+
+  // CHATTING
 }
 
 function log(s) {
-  // prints a string to the ingame terminal
   let lineJump = "<br>";
   if (terminalP.innerHTML == "") {
     lineJump = "";
@@ -57,7 +69,8 @@ function getHelp() {
   let helpMessage = [
     narratorName + ": Here are some things you can ask your spewk...",
     " -'wander' gives you a code to send your spewk traveling.",
-    " -'part ways' tells your friend to leave.",
+    " -'part ways' tells your invited friend to leave.",
+    " -'scratch' if your spewk itches.",
     " -'reset' reset your world.",
     " -'i never loved you' is the worst thing to tell your spewk.",
     " - Paste a spewks code to invite a friend.",
@@ -82,7 +95,7 @@ function userCommand(s) {
     exportSpewk();
     return true;
   }
-  if (s.indexOf("01581") == 0) {
+  if (s.indexOf("a5856585") != -1) {
     inviteSpewk(s);
     return true;
   }
@@ -94,23 +107,36 @@ function userCommand(s) {
     spewkFoundDead();
     return true;
   }
+  if (s == "scratch" || s == "upgrade" || s == "grow") {
+    upgradeSpewk()
+    return true
+  }
   if (scan(s, ["hey", "hello", "wassup", "what's up", "hi", "!", "yo"], true)) {
-    spewkSays("Ihu!");
+    spewkSays("Ihu!", false);
     playSound(sounds.spewkIhu);
   }
   return false; // returns false if not a command
 }
 
-function spewkSays(s, guest = false) {
-  if (guest) {
-    log(game.guest.data.name + ": " + s);
-  } else {
-    log(game.data.name + ": " + s);
+async function spewkSays(s, setDelay = true) {
+  let timer = 0
+  if (setDelay) {
+    timer = randTo(1200)
   }
+  await delay(timer);
+  log(game.data.name + ": " + s);
+}
+
+async function guestSpewkSays(s, delay = true) {
+  log(game.guest.data.name + ": " + s);
 }
 
 function playerSays(s) {
   log(playerPrefix + s);
+}
+
+function narratorSays(s) {
+  log(narratorName + ": " + s)
 }
 
 function focusTerminal() {
@@ -191,7 +217,7 @@ function updateLvGraphics() {
   for (let i = 0; i < lv.length; i++) {
     canvas[y][x + i] = lv[i];
   }
-  if (game.data.availableUps > 0) {
+  if (getRemainingChars(layersArr[layers.spewk]) > 0) {
     canvas[y][x + lv.length] = "+";
   }
   layersArr[layers.ui] = fake2d(canvas);
@@ -267,13 +293,8 @@ function moveSprite(sprite, pos = { x: 0, y: 0 }, allowLeave = false) {
   return tempSprite;
 }
 
-/////////////////////////////////////////
-// USER ACTIONS
-/////////////////////////////////////////
-
-function drawUpgradeUI(yNumber, availableChars = 1) {
+function drawUpgradeUI(yNumber, availableChars) {
   let result = [...upgradeUICanvas];
-
   for (let [y, line] of result.entries()) {
     if (y == result.length - 1) {
       break;
@@ -283,7 +304,7 @@ function drawUpgradeUI(yNumber, availableChars = 1) {
       " ".repeat(result[y].length - 2 * xSafeZone) +
       "#".repeat(xSafeZone);
     if (y < ySafeZone || ySafeZone > result.length - 1 - y) {
-      result[y] = "##############################";
+      result[y] = "#".repeat(default_frame["x"]);
     }
     if (y == yNumber) {
       result[y] =
@@ -303,48 +324,66 @@ function drawUpgradeUI(yNumber, availableChars = 1) {
   return result;
 }
 
+/////////////////////////////////////////
+// USER ACTIONS
+/////////////////////////////////////////
+
 async function upgradeSpewk() {
+  if (getRemainingChars(layersArr[layers.spewk]) <= 0) {
+    narratorSays(game.data.name + " is not currently itching.")
+    return
+  }
   centerSpewk();
   pause();
   inAProgram = true;
   let validUpgrade = false;
   let spewk = layersArr[layers.spewk];
   let editedSpewk = fake2d(spewk);
-  clearLayers();
+  narratorSays("Add characters to your spewk line by line!")
 
-  for (let [y, line] of editedSpewk.entries()) {
-    // editing each line one by one
-    if (y == editedSpewk.length - ySafeZone) {
-      break;
+  while (!validUpgrade) {
+    clearLayers();
+    editedSpewk = fake2d(spewk);
+    for (let [y, line] of editedSpewk.entries()) {
+      // render
+      layersArr[layers.spewk] = editedSpewk;
+      layersArr[layers.ui] = drawUpgradeUI(y, getRemainingChars(editedSpewk));
+      mergeAndRender();
+      // line checks
+      if (ySafeZone > spacesFrame.length - y - 1) {
+        break
+      }
+      if (y < ySafeZone) {
+        playerSays(renderedFrame[y]);
+        continue;
+      }
+      // preps the command line
+      commandLineInput.value = renderedFrame[y];
+      // Input waiter
+      let beforeMsgCount = sessionMessages.length;
+      while (beforeMsgCount == sessionMessages.length) {
+        await delay(40);
+      }
+      // edit the line
+      let treatedLine = sessionMessages.at(-1);
+      treatedLine = treatedLine
+        .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone))
+        .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone));
+      editedSpewk[y] = treatedLine;
     }
-    layersArr[layers.spewk] = editedSpewk;
-    layersArr[layers.ui] = drawUpgradeUI(y);
-    mergeAndRender();
-    if (y < ySafeZone || ySafeZone > spacesFrame.length - 1 - y) {
-      console.log(renderedFrame[y]);
-      playerSays(renderedFrame[y]);
-      continue;
+
+    validUpgrade = validateUpgrade(spewk, editedSpewk)
+    if (!validUpgrade) {
+      narratorSays("Not a valid upgrade. Starting over.")
     }
-    commandLineInput.value = renderedFrame[y];
-    let beforeMsgCount = sessionMessages.length;
-    // Input waiter
-    while (beforeMsgCount == sessionMessages.length) {
-      await delay(40);
-    }
-    let treatedLine = sessionMessages.at(-1);
-    treatedLine = treatedLine
-      .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone))
-      .replace("-".repeat(xSafeZone), " ".repeat(xSafeZone));
-    editedSpewk[y] = treatedLine;
   }
-
-  console.log("Spewk edited : ");
-  console.log(editedSpewk);
+  // if upgrade is valid
+  narratorSays(game.data.name + " grew!")
   clearLayers();
   game.graphics.spewk = real2d(editedSpewk);
   loadLayers();
-  play();
   inAProgram = false;
+  play();
 }
 
 function pause() {
@@ -358,10 +397,10 @@ async function exportSpewk() {
   gameString = crypt("spewk", gameString);
   try {
     await navigator.clipboard.writeText(gameString);
-    log(narratorName + ": Copied to clipboard!");
+    narratorSays("Copied to clipboard!")
   } catch (err) {
     log(gameString);
-    log(narratorName + ": Spewks code ready to copy!");
+    narratorSays("Spewks code ready to copy!")
   }
 }
 
@@ -370,7 +409,7 @@ function inviteSpewk(s) {
     let guestObject = JSON.parse(decrypt("spewk", s));
     game.guest = guestObject;
     if (lookForGuest()) {
-      log(game.guest.data.name + ": Hello!");
+      guestSpewkSays("Hello!");
     }
   } catch {
     chatError();
@@ -381,7 +420,7 @@ function excludeGuest() {
   if (game.guest == null) {
     chatError();
   }
-  log(game.guest.data.name + ": Goodbye!");
+  guestSpewkSays("Goodbye!");
   layersArr[layers.guest] = "";
   game.guest = null;
   console.log(layersArr);
@@ -395,7 +434,6 @@ function excludeGuest() {
 function levelUp() {
   game.data.level++;
   game.data.xp = 0;
-  game.data.availableUps++;
   spewkSays("I'm itching...");
   updateLvGraphics();
 }
@@ -432,6 +470,53 @@ function spewkFoundDead() {
 /////////////////////////////////////////
 // CHECKS
 /////////////////////////////////////////
+
+function getRemainingChars(spewk) {
+  let maxChars = maxStartingChars + game.data.level - 1
+  let charCounter = 0
+  for (let line of spewk) {
+    for (let c of line) {
+      if (c != " ") {
+        charCounter++
+      }
+    }
+  }
+  console.log(charCounter + " chars detected on a max amount of " + maxChars)
+  return maxChars - charCounter
+}
+
+function validateUpgrade(original, edited) {
+  // test char numbers
+  if (getRemainingChars(edited) < 0) {
+    narratorSays("Too many chars !")
+    return false
+  }
+  // test presence of original face
+  let foundSpewkFace = false
+  for (let line of edited) {
+    if (line.indexOf(game.graphics.spewkFace) != -1) {
+      foundSpewkFace = true
+    }
+  }
+  if (!foundSpewkFace) {
+    narratorSays("Didn't recognize spewk face.")
+    return false
+  }
+  // test proximity of chars
+  for (let [y, line] of real2d(edited).entries()) {
+    for (let [x, char] of line.entries()) {
+      if (char == " ") {
+        continue
+      }
+      if (edited[y - 1][x - 1] == " " && edited[y - 1][x] == " " && edited[y - 1][x + 1] == " " && edited[y][x - 1] == " " && edited[y][x + 1] == " " && edited[y + 1][x - 1] == " " && edited[y + 1][x] == " " && edited[y + 1][x + 1] == " ") {
+        narratorSays("Found floating character.")
+        return false
+      }
+    }
+  }
+  // validates the upgrade if nothing went wrong
+  return true
+}
 
 function checkIfAte() {
   let spewk = layersArr[layers.spewk];
@@ -480,7 +565,7 @@ function getRandomBiome() {
 function generateName() {
   return capitalize(
     randomSyllables[randTo(randomSyllables.length - 1)] +
-      randomSyllables[randTo(randomSyllables.length - 1)],
+    randomSyllables[randTo(randomSyllables.length - 1)],
   );
 }
 

@@ -63,6 +63,9 @@ const spewkFaces = [
   "-_-",
 ];
 
+// refer to settings.js : maxStartingChars for the max number of chars in a spewk
+// It is currently set up to 6
+
 const spewkBodies = [
   [
     "                              ",

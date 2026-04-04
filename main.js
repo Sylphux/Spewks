@@ -88,7 +88,7 @@ commandLineInput.addEventListener("keydown", (event) => {
   if (key === "Enter") {
     userSends(commandLineInput.value);
   }
-  if (key === "ArrowUp" || key === "ArrowDown") {
+  if (key === "ArrowUp" || key === "ArrowDown" && !inAProgram) {
     navThroughLastMessages(key);
   }
 });

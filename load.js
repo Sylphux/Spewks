@@ -49,8 +49,6 @@ let game = {
     lastSeen: "",
     level: 1,
     xp: 0,
-    upgrades: 0,
-    availableUps: 0,
     intention: "none",
     foodPos: { x: -1, y: -1 },
     alive: true,
@@ -179,3 +177,5 @@ lookForGuest();
 /////////////////////////////////////////
 
 verifyAbsence();
+
+saveGame()
