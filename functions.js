@@ -51,7 +51,7 @@ function chatError() {
 function formatUserMessage(s) {
   s = s.trim();
   s = s.toLowerCase();
-  s = s.split(" ");
+  // s = s.split(" ");
   // implement abbreviations replacement here
   console.log("Formatted message : " + s);
   return s;
@@ -96,8 +96,11 @@ function userCommand(s) {
     return true;
   }
   if (s.indexOf("a5856585") != -1) {
+    console.log("Invite detected.")
     inviteSpewk(s);
     return true;
+  } else {
+    console.log("no invite")
   }
   if (s == "reset") {
     reset();
