@@ -166,10 +166,6 @@ if (onlyNewGame) {
   }
 }
 
-if (spawnFakeGuest) {
-  inviteSpewk(specialGuest);
-}
-
 lookForGuest();
 
 /////////////////////////////////////////

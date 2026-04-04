@@ -1,69 +1,68 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- <link ref="game" href="game.css"> -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Spewks</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Spewks</h1>
-      <p>Little spewks will grow strong!</p>
-    </header>
 
-    <div id="play_zone" onclick="focusTerminal()">
-      <pre id="rendered_frame">No render.</pre>
-      <div id="chat_zone">
-        <p id="terminal"></p>
-        <div id="command_line_box">
-          <pre id="dollar_sign_term"># </pre>
-          <input
-            id="command_line"
-            text=""
-            placeholder="Start chatting or type 'help'"
-          />
-        </div>
+<head>
+  <!-- <link ref="game" href="game.css"> -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spewks</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="Themes/dark_theme.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Spewks</h1>
+    <p>Little spewks will grow strong!</p>
+  </header>
+
+  <div id="play_zone" onclick="focusTerminal()">
+    <pre id="rendered_frame">No render.</pre>
+    <div id="chat_zone">
+      <p id="terminal"></p>
+      <div id="command_line_box">
+        <pre id="dollar_sign_term"># </pre>
+        <input id="command_line" text="" placeholder="Start chatting or type 'help'" />
       </div>
     </div>
+  </div>
 
-    <div id="controls_zone">
-      <div id="dev_controls" class="controls">
-        <button onclick="playPause()">Play / Pause</button>
-        <button onclick="console.log(game)">Get game info</button>
-        <button onclick="playSound(sounds.spewkIhu)">Playsound</button>
-        <button onclick="console.log(audioContext.state)">
-          Get sound state
-        </button>
-        <button onclick="levelUp()">Level up</button>
-        <button onclick="reset()">Reset</button>
-        <button onclick="centerSpewk()">Center</button>
-        <button onclick="upgradeSpewk()">Upgrade</button>
-      </div>
-      <div id="player_controls" class="controls">
-        <button id="toggle_sound" onclick="toggleSound()">Sound OFF</button>
-      </div>
+  <div id="controls_zone">
+    <div id="dev_controls" class="controls">
+      <button onclick="playPause()">Play / Pause</button>
+      <button onclick="console.log(game)">Get game info</button>
+      <button onclick="playSound(sounds.spewkIhu)">Playsound</button>
+      <button onclick="console.log(audioContext.state)">
+        Get sound state
+      </button>
+      <button onclick="levelUp()">Level up</button>
+      <button onclick="reset()">Reset</button>
+      <button onclick="centerSpewk()">Center</button>
+      <button onclick="upgradeSpewk()">Upgrade</button>
     </div>
-
-    <div id="hidden_stuff">
-      <div id="audio_files"></div>
+    <div id="player_controls" class="controls">
+      <button id="toggle_sound" onclick="toggleSound()">Sound OFF</button>
     </div>
-    <footer>
-      <p>
-        Visit the <a href="https://github.com/Sylphux/Spewks">github page</a>
-      </p>
-      <p>Made by Sylphus in JS.</p>
-    </footer>
-  </body>
+  </div>
 
-  <script src="utils.js"></script>
-  <script src="settings.js"></script>
-  <script src="data_declaration.js"></script>
-  <script src="ascii_graphics.js"></script>
-  <script src="custom_dict.js"></script>
-  <script src="renderengine.js"></script>
-  <script src="functions.js"></script>
-  <script src="load.js"></script>
-  <script src="main.js"></script>
+  <div id="hidden_stuff">
+    <div id="audio_files"></div>
+  </div>
+  <footer>
+    <p>
+      Visit the <a href="https://github.com/Sylphux/Spewks">github page</a>
+    </p>
+    <p>Made by Sylphus in JS.</p>
+  </footer>
+</body>
+
+<script src="utils.js"></script>
+<script src="settings.js"></script>
+<script src="ascii_graphics.js"></script>
+<script src="custom_dict.js"></script>
+<script src="renderengine.js"></script>
+<script src="functions.js"></script>
+<script src="load.js"></script>
+<script src="main.js"></script>
+
 </html>

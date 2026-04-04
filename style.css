@@ -9,11 +9,6 @@
 }
 
 :root {
-  --text: rgb(221, 43, 141);
-  --glow: rgb(211, 134, 82);
-  --dark: rgb(7, 12, 59);
-  --darker: rgb(3, 6, 29);
-  --medium: rgb(45, 23, 87);
   --gameFontSize: 21px;
   --siteFontSize: 15px;
 }

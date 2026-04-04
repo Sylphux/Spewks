@@ -1,5 +1,5 @@
 /////////////////////////////////////////
-// COOKIES (obsolete)
+// COOKIES (unused for now)
 /////////////////////////////////////////
 
 function setCookie(cname, val, exdays = 400) {
@@ -72,8 +72,8 @@ function scan(string, sub, scanChars = false) {
   if (!scanChars) {
     return string.indexOf(sub) != -1;
   } else {
-    for (let c of sub){
-      if (scan(string, c)){
+    for (let c of sub) {
+      if (scan(string, c)) {
         return true
       }
     }
